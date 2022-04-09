@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../contexts/auth-context";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
+  const { isUser, setIsUser } = useAuthContext();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,10 +29,15 @@ function Login() {
 
     if (data.user) {
       localStorage.setItem("token", data.user);
+      setIsUser(true);
       alert("login successful");
       navigate("/");
     }
   };
+
+  useEffect(() => {
+    localStorage.removeItem("token");
+  }, []);
 
   return (
     <section className="min-h-screen max-w-7xl mx-auto">

@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import BookList from "../components/BookList";
+import BookForm from "../components/BookForm";
 import { useAuthContext } from "../contexts/auth-context";
 
-function Home() {
+function AddBook() {
   const navigate = useNavigate();
 
   const { isUser } = useAuthContext();
@@ -15,13 +15,10 @@ function Home() {
   }, [isUser]);
 
   return (
-    <div className="min-h-screen max-w-7xl mx-auto space-y-12">
-      <div className="flex justify-center">
-        <h2>List of books available</h2>
-      </div>
-      <BookList />
-    </div>
+    <section className="min-h-screen max-w-7xl mx-auto">
+      <BookForm />
+    </section>
   );
 }
 
-export default Home;
+export default AddBook;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Signup() {
@@ -33,6 +33,10 @@ function Signup() {
 
     navigate("/login");
   };
+
+  useEffect(() => {
+    localStorage.removeItem("token");
+  }, []);
 
   return (
     <section className="min-h-screen max-w-7xl mx-auto">
