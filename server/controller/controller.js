@@ -36,7 +36,7 @@ async function get_User(req, res) {
           email,
         },
         "secret123",
-        { expiresIn: Date.now() * (60 * 60 * 1000) }
+        { expiresIn: "1h" }
       );
       return res.json({ status: "ok", user: token });
     } else return res.json({ status: "error", user: false });

@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
 function BookForm() {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [price, setPrice] = useState("");
   const [stock, setStock] = useState("");
+
+  const { register } = useForm();
 
   const navigate = useNavigate();
 
@@ -86,43 +89,68 @@ function BookForm() {
   }, [bookId]);
 
   return (
-    <div>
+    <div className="bg-gray-200 dark:bg-slate-600 rounded p-6 w-full max-w-xl shadow-xl">
       <form onSubmit={!bookId ? handleSubmit : handleSubmitEdit}>
         <div className="flex flex-col space-y-6">
-          <label htmlFor="name">
-            title
+          <div className="form-control">
+            <label className="input-label" htmlFor="title">
+              Title
+            </label>
             <input
+              className="input-style"
+              id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               type="text"
+              minLength={2}
+              required
             />
-          </label>
-          <label htmlFor="email">
-            author
+          </div>
+
+          <div className="form-control">
+            <label className="input-label" htmlFor="author">
+              Author{" "}
+            </label>
             <input
+              className="input-style"
+              id="author"
               value={author}
               onChange={(e) => setAuthor(e.target.value)}
-              type="string"
+              type="text"
+              minLength={3}
+              required
             />
-          </label>
-          <label htmlFor="password">
-            price
+          </div>
+
+          <div className="form-control">
+            <label className="input-label" htmlFor="price">
+              Price
+            </label>
             <input
+              className="input-style"
+              id="price"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               type="number"
+              required
             />
-          </label>
-          <label htmlFor="password">
-            stock
+          </div>
+
+          <div className="form-control">
+            <label className="input-label" htmlFor="stock">
+              Stock
+            </label>
             <input
+              className="input-style"
+              id="stock"
               value={stock}
               onChange={(e) => setStock(e.target.value)}
               type="number"
             />
-          </label>
+          </div>
+
+          <button className="form-button">submit</button>
         </div>
-        <button>submit</button>
       </form>
     </div>
   );

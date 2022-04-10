@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import BookForm from "../components/BookForm";
 import { useAuthContext } from "../contexts/auth-context";
 
@@ -8,6 +8,8 @@ function AddBook() {
 
   const { isUser } = useAuthContext();
 
+  const { bookId } = useParams();
+
   useEffect(() => {
     if (!isUser) {
       navigate("/login");
@@ -15,7 +17,10 @@ function AddBook() {
   }, [isUser]);
 
   return (
-    <section className="min-h-screen max-w-7xl mx-auto">
+    <section className="mx-auto max-w-7xl min-h-[90vh] p-4 mt-12 space-y-6 flex flex-col items-center">
+      <h2 className="text-4xl font-bold">
+        {bookId ? "Edit current book" : "Add a book"}
+      </h2>
       <BookForm />
     </section>
   );

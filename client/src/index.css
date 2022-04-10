@@ -6,4 +6,61 @@
   input {
     @apply text-black;
   }
+
+  .css-console {
+    @apply outline outline-2 outline-pink-400;
+  }
+
+  .home-book-icons {
+    @apply flex items-center gap-x-1 transform hover:-translate-y-1 hover:scale-110 transition-all duration-300 capitalize text-lg;
+  }
+
+  .detail-book-icons {
+    @apply flex items-center gap-x-1 w-1/2 justify-center bg-gray-400 dark:bg-slate-500 outline outline-2 outline-gray-400 dark:outline-slate-500  p-2 capitalize rounded hover:bg-transparent transition-all duration-200 dark:hover:bg-transparent text-xl;
+  }
+
+  .delete-modal-buttons {
+    @apply bg-gray-300 dark:bg-slate-500 px-4 py-1 hover:bg-transparent transition-all hover:outline rounded;
+  }
+
+  .nav-link {
+    @apply text-2xl md:text-3xl font-medium hover:underline capitalize;
+  }
+
+  .active-nav-link {
+    @apply text-3xl md:text-4xl font-bold capitalize dark:text-black text-white;
+  }
+
+  .form-control {
+    @apply flex flex-col space-y-2;
+  }
+
+  .input-label {
+    @apply font-bold text-lg md:text-2xl capitalize;
+  }
+
+  .form-button {
+    @apply w-full bg-gray-400 dark:bg-slate-500 rounded px-4 py-2 capitalize text-2xl font-bold hover:outline dark:hover:bg-transparent hover:bg-transparent transition-all duration-200;
+  }
+
+  /* input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  input[type="number"] {
+    @apply w-full dark:bg-gray-100 bg-gray-300 border-2 px-4 py-2 text-xl;
+  } */
+
+  .input-style {
+    @apply w-full dark:bg-gray-100 bg-gray-300 border-2 px-4 py-2 text-xl;
+  }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
 }

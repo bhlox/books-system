@@ -14,16 +14,16 @@ export const AuthProvider = ({ children }) => {
   const exists = () => {
     console.log(`user details:`, isUser);
     if (isUser) {
-      if (Number(isUser.exp) < Number(Date.now())) {
+      if (Number(isUser.exp) > Number(Date.now())) {
         alert("token expired");
         localStorage.removeItem("token");
         return false;
-      } else return true;
+      } else return isUser;
     }
     return false;
   };
 
-  console.log("does it exist", exists());
+  // console.log("does it exist", exists());
 
   return (
     <AuthContext.Provider value={{ isUser, setIsUser }}>

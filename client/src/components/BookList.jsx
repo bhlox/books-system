@@ -9,13 +9,13 @@ function BookList() {
   const [currentPage, setCurrentPage] = useState(1);
   const initialRef = useRef();
 
-  const { totalPages, displayedItems } = usePaginate(bookData, 2);
+  const { totalPages, displayedItems } = usePaginate(bookData, 9);
 
   useEffect(() => {
     const fetchBooks = async () => {
       const resp = await fetch(`${process.env.REACT_APP_BASE_URL}/api/books`);
       const data = await resp.json();
-      console.log(data);
+      // console.log(data);
 
       setBookData(data);
     };
@@ -32,12 +32,18 @@ function BookList() {
   }, [didDelete]);
 
   return (
-    <div className="flex flex-wrap">
-      {displayedItems[currentPage - 1]?.map((item) => (
-        <Book key={item._id} {...item} setDidDelete={setDidDelete} />
-      ))}
-      <Pagination totalPages={totalPages} setCurrentPage={setCurrentPage} />
-    </div>
+    <>
+      <div className="flex flex-wrap gap-y-4">
+        {displayedItems[currentPage - 1]?.map((item) => (
+          <Book key={item._id} {...item} setDidDelete={setDidDelete} />
+        ))}
+      </div>
+      <Pagination
+        totalPages={totalPages}
+        setCurrentPage={setCurrentPage}
+        currentPage={currentPage}
+      />
+    </>
   );
 }
 

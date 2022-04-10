@@ -15,9 +15,9 @@ function Home() {
   }, [isUser]);
 
   return (
-    <div className="min-h-screen max-w-7xl mx-auto space-y-12">
+    <div className="min-h-screen max-w-7xl mx-auto space-y-12 p-4 mt-4">
       <div className="flex justify-center">
-        <h2>List of books available</h2>
+        <h2 className="text-4xl font-bold">Available books</h2>
       </div>
       <BookList />
     </div>
