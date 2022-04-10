@@ -17,7 +17,7 @@ mongoose
   .connect(process.env.ATLAS_URI)
   .then(() => {
     app.listen(port, () => {
-      console.log(`SERVER IS RUNNING AT http://localhost:${port}`);
+      console.log(`SERVER IS RUNNING`);
     });
   })
   .catch((err) => console.log(err));
