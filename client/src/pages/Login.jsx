@@ -8,6 +8,7 @@ function Login() {
   const [password, setPassword] = useState("");
 
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const { isUser, setIsUser } = useAuthContext();
@@ -15,31 +16,39 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const resp = await fetch(`${process.env.REACT_APP_BASE_URL}/api/login`, {
-      method: "POST",
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    setLoading(true);
 
-    const data = await resp.json();
+    try {
+      const resp = await fetch(`${process.env.REACT_APP_BASE_URL}/api/login`, {
+        method: "POST",
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-    console.log(data);
+      const data = await resp.json();
 
-    if (data.status === "error") {
-      alert("invalid user credentials");
-      return;
-    }
+      console.log(data);
 
-    if (data.user) {
-      localStorage.setItem("token", data.user);
-      setIsUser(true);
-      alert("login successful");
-      navigate("/");
+      if (data.status === "error") {
+        alert("invalid user credentials");
+        setLoading(false);
+        return;
+      }
+
+      if (data.user) {
+        localStorage.setItem("token", data.user);
+        setIsUser(true);
+        setLoading(false);
+        alert("login successful");
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -89,7 +98,12 @@ function Login() {
               {showPassword ? <HiEyeOff /> : <HiEye />}
             </button>
           </div>
-          <button className="form-button">submit</button>
+          {loading && (
+            <div className="flex justify-center text-3xl font-bold">
+              Verifying...
+            </div>
+          )}
+          {!loading && <button className="form-button">submit</button>}
         </div>
       </form>
     </section>

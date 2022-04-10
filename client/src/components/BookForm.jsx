@@ -8,6 +8,8 @@ function BookForm() {
   const [price, setPrice] = useState("");
   const [stock, setStock] = useState("");
 
+  const [loading, setLoading] = useState(false);
+
   const { register } = useForm();
 
   const navigate = useNavigate();
@@ -16,6 +18,8 @@ function BookForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setLoading(true);
 
     try {
       const resp = await fetch(`${process.env.REACT_APP_BASE_URL}/api/books`, {
@@ -37,35 +41,46 @@ function BookForm() {
 
       alert("added a book");
       navigate(`/book/${data.create._id}`);
+      setLoading(false);
       return;
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
   const handleSubmitEdit = async (e) => {
     e.preventDefault();
 
-    const resp = await fetch(`${process.env.REACT_APP_BASE_URL}/api/books`, {
-      method: "PUT",
-      body: JSON.stringify({
-        title,
-        author,
-        price,
-        stock,
-        bookId,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    setLoading(true);
 
-    const data = await resp.json();
+    try {
+      const resp = await fetch(`${process.env.REACT_APP_BASE_URL}/api/books`, {
+        method: "PUT",
+        body: JSON.stringify({
+          title,
+          author,
+          price,
+          stock,
+          bookId,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-    console.log(data);
+      const data = await resp.json();
 
-    alert("edited a book");
-    navigate(`/book/${bookId}`);
+      console.log(data);
+
+      setLoading(false);
+
+      alert("edited a book");
+      navigate(`/book/${bookId}`);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -149,7 +164,12 @@ function BookForm() {
             />
           </div>
 
-          <button className="form-button">submit</button>
+          {loading && (
+            <div className="font-bold text-3xl flex justify-center">
+              <p>Sending data...</p>
+            </div>
+          )}
+          {!loading && <button className="form-button">submit</button>}
         </div>
       </form>
     </div>

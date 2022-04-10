@@ -7,6 +7,7 @@ function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -15,8 +16,11 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setLoading(true);
+
     if (password !== confirmPassword) {
       alert("Passwords are not matching. Pls check");
+      setLoading(false);
       return;
     }
 
@@ -36,14 +40,17 @@ function Signup() {
       const data = await resp.json();
       if (data?.message?.split(" ").includes("duplicate")) {
         alert("email already taken");
+        setLoading(false);
         return;
       }
 
       alert("account created");
+      setLoading(false);
 
       navigate("/login");
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -128,7 +135,12 @@ function Signup() {
               {showPassword ? <HiEyeOff /> : <HiEye />}
             </button>
           </div>
-          <button className="form-button">submit</button>
+          {loading && (
+            <div className="font-bold text-3xl flex justify-center">
+              <p>Processing...</p>
+            </div>
+          )}
+          {!loading && <button className="form-button">submit</button>}
         </div>
       </form>
     </section>
