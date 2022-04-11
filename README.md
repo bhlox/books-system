@@ -28,7 +28,7 @@ password: user123
 Navigate to server folder
 
 ```bash
-  cd server
+  cd .\server\
   npm install
   npm run start
 ```
@@ -37,7 +37,7 @@ Navigate to server folder
 Navigate to client folder
 
 ```bash
-  cd client
+  cd .\client\
   npm install
   npm run start
 ```
