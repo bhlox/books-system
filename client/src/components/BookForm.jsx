@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useForm } from "react-hook-form";
 
 function BookForm() {
   const [title, setTitle] = useState("");
@@ -8,9 +7,15 @@ function BookForm() {
   const [price, setPrice] = useState("");
   const [stock, setStock] = useState("");
 
-  const [loading, setLoading] = useState(false);
+  const [titleError, setTitleError] = useState("");
+  const [authorError, setAuthorError] = useState("");
+  const [priceError, setPriceError] = useState("");
+  const [stockError, setStockError] = useState("");
 
-  const { register } = useForm();
+  const priceInputRef = useRef();
+  const stockInputRef = useRef();
+
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -21,62 +26,84 @@ function BookForm() {
 
     setLoading(true);
 
-    try {
-      const resp = await fetch(`${process.env.REACT_APP_BASE_URL}/api/books`, {
-        method: "POST",
-        body: JSON.stringify({
-          title,
-          author,
-          price,
-          stock,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+    if (title.length < 3) {
+      setTitleError("Minimum of 3 characters");
+    } else setTitleError("");
+    if (!stockInputRef.current.value) {
+      setStockError("Pls enter stocks");
+    } else setStockError("");
 
-      const data = await resp.json();
+    if (author.length < 3) {
+      setAuthorError("Minimum of 3 characters");
+    } else setAuthorError("");
+    if (!priceInputRef.current.value) {
+      setPriceError("Pls enter a price value");
+    } else setPriceError("");
 
-      console.log(data);
-
-      alert("added a book");
-      navigate(`/book/${data.create._id}`);
+    if (
+      title.length < 3 ||
+      !stockInputRef.current.value ||
+      author.length < 3 ||
+      !priceInputRef.current.value
+    ) {
       setLoading(false);
       return;
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
     }
-  };
-
-  const handleSubmitEdit = async (e) => {
-    e.preventDefault();
-
-    setLoading(true);
 
     try {
-      const resp = await fetch(`${process.env.REACT_APP_BASE_URL}/api/books`, {
-        method: "PUT",
-        body: JSON.stringify({
-          title,
-          author,
-          price,
-          stock,
-          bookId,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      if (!bookId) {
+        const resp = await fetch(
+          `${process.env.REACT_APP_BASE_URL}/api/books`,
+          {
+            method: "POST",
+            body: JSON.stringify({
+              title,
+              author,
+              price,
+              stock,
+            }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
-      const data = await resp.json();
+        const data = await resp.json();
 
-      console.log(data);
+        // console.log(data);
 
-      setLoading(false);
+        // alert("added a book");
+        navigate(`/book/${data.create._id}`);
+        setLoading(false);
+        return;
+      } else {
+        const resp = await fetch(
+          `${process.env.REACT_APP_BASE_URL}/api/books`,
+          {
+            method: "PUT",
+            body: JSON.stringify({
+              title,
+              author,
+              price,
+              stock,
+              bookId,
+            }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
-      alert("edited a book");
-      navigate(`/book/${bookId}`);
+        const data = await resp.json();
+
+        // console.log(data);
+
+        setLoading(false);
+
+        // alert("edited a book");
+        navigate(`/book/${bookId}`);
+        return;
+      }
     } catch (error) {
       console.log(error);
       setLoading(false);
@@ -105,7 +132,7 @@ function BookForm() {
 
   return (
     <div className="bg-gray-200 dark:bg-slate-600 rounded p-6 w-full max-w-xl shadow-xl">
-      <form onSubmit={!bookId ? handleSubmit : handleSubmitEdit}>
+      <form onSubmit={handleSubmit}>
         <div className="flex flex-col space-y-6">
           <div className="form-control">
             <label className="input-label" htmlFor="title">
@@ -118,8 +145,10 @@ function BookForm() {
               onChange={(e) => setTitle(e.target.value)}
               type="text"
               minLength={2}
-              required
             />
+            {titleError && (
+              <p className="text-2xl font-medium text-red-400">{titleError}</p>
+            )}
           </div>
 
           <div className="form-control">
@@ -133,8 +162,10 @@ function BookForm() {
               onChange={(e) => setAuthor(e.target.value)}
               type="text"
               minLength={3}
-              required
             />
+            {authorError && (
+              <p className="text-2xl font-medium text-red-400">{authorError}</p>
+            )}
           </div>
 
           <div className="form-control">
@@ -143,12 +174,15 @@ function BookForm() {
             </label>
             <input
               className="input-style"
+              ref={priceInputRef}
               id="price"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               type="number"
-              required
             />
+            {priceError && (
+              <p className="text-2xl font-medium text-red-400">{priceError}</p>
+            )}
           </div>
 
           <div className="form-control">
@@ -156,12 +190,16 @@ function BookForm() {
               Stock
             </label>
             <input
+              ref={stockInputRef}
               className="input-style"
               id="stock"
               value={stock}
               onChange={(e) => setStock(e.target.value)}
               type="number"
             />
+            {stockError && (
+              <p className="text-2xl font-medium text-red-400">{stockError}</p>
+            )}
           </div>
 
           {loading && (
